@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="on-screen-calculator.css">
+		<script src="on-screen-calculator.js"></script> 
+		<title> On Screen Calculator</title>		
+	</head>
+	<body>
+		<div class="container">
+			<div>
+				<textarea class="button" id="output"></textarea>
+			</div>
+			<div class="layer1">				
+				<div class="button" id="1" onclick="processClick(this.id)">1</div>
+				<div class="button" id="2" onclick="processClick(this.id)">2</div>	
+				<div class="button" id="3" onclick="processClick(this.id)">3</div>
+				<div class="button" id="+" onclick="processClick(this.id)">+</div>
+			</div>			
+			<div class="layer2">
+				<div class="button" id="4" onclick="processClick(this.id)">4</div>
+				<div class="button" id="5" onclick="processClick(this.id)">5</div>			
+				<div class="button" id="6" onclick="processClick(this.id)">6</div>
+				<div class="button" id="-" onclick="processClick(this.id)">-</div>
+			</div>			
+			<div class="layer3">
+				<div class="button" id="7" onclick="processClick(this.id)">7</div>
+				<div class="button" id="8" onclick="processClick(this.id)">8</div>
+				<div class="button" id="9" onclick="processClick(this.id)">9</div>			
+				<div class="button" id="*" onclick="processClick(this.id)">*</div>
+			</div>
+			<div class="layer4"> 
+				<div class="button" id="0" onclick="processClick(this.id)">0</div>
+				<div class="button" id="=" onclick="processClick(this.id)">=</div>
+				<div class="button" id="/" onclick="processClick(this.id)">/</div>
+				<div class="button" id="C" onclick="processClick(this.id)">C</div>				
+			</div>
+		</div>
+	</body>
+</html>
