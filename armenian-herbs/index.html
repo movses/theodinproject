@@ -3,19 +3,43 @@
 	<head>
 		<title> Armenian Herbs </title>
 		<link  rel="stylesheet" type="text/css" href="style.css"> 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"> 
-		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"> </script>
 	 </head>
 	<body id="page">
 		<div id="content">
 			<h1 color='green'>Armenian Herbs</h1>
 			<ul>
-				<li>Home</li>
-				<li>Armeian Medical Herbs</li>
-				<li>General Terms</li>
-				<li>About</li>
+				<li id='home'>Home</li>
+				<li id='herbs'>Armeian Medical Herbs</li>
+				<li id='terms'>General Terms</li>
+				<li id='about'>About</li>
 			</ul>
+			<div id='image'></div>
 		</div>
+		<script>
+			$( document ).ready(function() {
+				$('#image').append("<img class='image-item' src='images/matenadaran.jpg'/>");
+				$('#home').click(function() {
+					var image = $('#image').find('.image-item');
+					$(image).replaceWith("<img class='image-item' src='images/matenadaran.jpg'>");
+				});
+
+				$('#herbs').click(function() {
+					var image = $('#image').find('.image-item');
+					$(image).replaceWith("<img class='image-item' src='images/nettle.jpg'>");
+				});
+
+				$('#terms').click(function() {
+					var image = $('#image').find('.image-item');
+					$(image).replaceWith("<img class='image-item' src='images/terms-book.jpeg'>");
+				});
+
+				$('#about').click(function() {
+					var image = $('#image').find('.image-item');
+					$(image).replaceWith("<img class='image-item' src='images/author.jpg'>");
+				});
+			});
+		</script>
 	</body>
 	<div id="footer">
 		<p>Copyright (c) 2015 Mosves Saponjyan. All rights reserved</p>
