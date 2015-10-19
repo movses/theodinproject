@@ -1,5 +1,5 @@
 var _score;
-var _initialState = [20,0];
+var _initialState = [20,10];
 var _direction = "r"; 
 var _initialSize = 3;
 
@@ -30,7 +30,6 @@ function getCell(row, col) {
 function setCell(row, col, val) {
 	var cells = document.getElementsByClassName("cell");
 	var cellIndex = getCellIndex(row, col); 
-	cell = cells[cellIndex];
 	cells[cellIndex].style.backgroundColor = val;
 }
 
@@ -42,9 +41,14 @@ function defaultBehavour() {
 	var i;
 	var snakeSize = _initialSize;
 	var currentState = _initialState;
+	setCell(currentState[0], currentState[1], "blue");
+	setCell(currentState[0], currentState[1] - snakeSize, "white");
+	currentState[1] += 1;
+}
+
+function initializeSnake() {
 	for (i = 0; i < snakeSize; i++) {
 		setCell(currentState[0], currentState[1], "blue");
-		setCell(currentState[0], currentState[1] - snakeSize, "white");
 		currentState[1] += 1;
 	} 
 }
@@ -52,7 +56,8 @@ function render() {
 	_score = 0;
 	createMatrix();	
 	showScore();
+	initializeSnake();
 }
 
-window.setInterval(defaultBehavour,500);
+window.setInterval(defaultBehavour,200);
 window.onload = render;		
