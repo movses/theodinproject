@@ -1,14 +1,14 @@
 #score
 {
-	width: 400px;
+	width: 600px;
 	height: 20px;
 	text-align: right;
 }
 
 #matrix
 {
-	width: 400px;
-	height: 400px;
+	width: 600px;
+	height: 600px;
 	border-top: 1px solid #999;
 	border-left: 1px solid #999;	
 }
@@ -16,8 +16,8 @@
 #matrix .cell
 {
 	float: left;
-	width: 19px;
-	height: 19px;	
+	width: 14px;
+	height: 14px;	
 	border-bottom: 1px solid #999;
 	border-right: 1px solid #999;	
 }

@@ -1,9 +1,13 @@
 var _score;
+var _initialState = [20,0];
+var _direction = "r"; 
+var _initialSize = 3;
 
-function createMatrix()
-{
+
+
+function createMatrix() {
 	var matrix = document.getElementById('matrix');
-	var n = 20 * 20;	
+	var n = 40 * 40;	
 	
 	for (var i = 0; i < n; i++)
 	{
@@ -13,22 +17,42 @@ function createMatrix()
 	}
 }
 
-function showScore()
-{
+function showScore() {
 	document.getElementById('score').innerHTML = _score;
 }
 
-function getCell(row, col)
-{
+function getCell(row, col) {
+	var cells = document.getElementsByClassName("cell");
+	var currentIndex = getCurrentIndex(row, col);
+	return cells[currentIndex];
 }
 
-function setCell(row, col, val)
-{
+function setCell(row, col, val) {
+	var cells = document.getElementsByClassName("cell");
+	var cellIndex = getCellIndex(row, col); 
+	cell = cells[cellIndex];
+	cells[cellIndex].style.backgroundColor = val;
 }
 
-window.onload = function()
-{
+function getCellIndex(row, col) {
+	return row * 40 + col;
+}
+
+function defaultBehavour() {
+	var i;
+	var snakeSize = _initialSize;
+	var currentState = _initialState;
+	for (i = 0; i < snakeSize; i++) {
+		setCell(currentState[0], currentState[1], "blue");
+		setCell(currentState[0], currentState[1] - snakeSize, "white");
+		currentState[1] += 1;
+	} 
+}
+function render() {
 	_score = 0;
 	createMatrix();	
-	showScore();	
-}				
+	showScore();
+}
+
+window.setInterval(defaultBehavour,500);
+window.onload = render;		
