@@ -155,11 +155,12 @@ function moveUp() {
 		restart();
 	} else {
 		setCell(head[0], head[1], "blue");
-		setCell(tail[0], tail[1], "white");
 		snake.push(head);
-		snake.shift();
-		if (head[0] === food[0] && head[1] === food[1]) {
+		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+		} else {
+			setCell(tail[0], tail[1], "white");
+			snake.shift();
 		}
 	}
 }
@@ -173,11 +174,12 @@ function moveLeft() {
 		restart();
 	} else {
 		setCell(head[0], head[1], "blue");
-		setCell(tail[0], tail[1], "white");
 		snake.push(head);
-		snake.shift();
-		if (head[0] === food[0] && head[1] === food[1]) {
+		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+		} else {
+			setCell(tail[0], tail[1], "white");
+			snake.shift();
 		}
 	}
 }
@@ -191,11 +193,12 @@ function moveRight() {
 		restart();
 	} else {
 		setCell(head[0], head[1], "blue");
-		setCell(tail[0], tail[1], "white");
 		snake.push(head);
-		snake.shift();
-		if (head[0] === food[0] && head[1] === food[1]) {
+		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+		} else {
+			setCell(tail[0], tail[1], "white");
+			snake.shift();
 		}
 	}
 }
@@ -209,11 +212,12 @@ function moveDown() {
 		restart();
 	} else {
 		setCell(head[0], head[1], "blue");
-		setCell(tail[0], tail[1], "white");
 		snake.push(head);
-		snake.shift();
-		if (head[0] === food[0] && head[1] === food[1]) {
+		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+		} else {
+			setCell(tail[0], tail[1], "white");
+			snake.shift();
 		}
 	}
 }
