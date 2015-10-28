@@ -3,6 +3,7 @@ var _direction;
 var _timerRef;
 
 var snake;
+var food;
 
 function createMatrix() {
 	var matrix = document.getElementById('matrix');
@@ -13,6 +14,17 @@ function createMatrix() {
 		div.className = 'cell';
 		matrix.appendChild(div);
 	}
+}
+
+function getRandomCell() {
+	var row = Math.floor(Math.random() * 40);
+	var col = Math.floor(Math.random() * 40);
+    return [row,col]; 
+}
+
+function createFood() {
+	food = getRandomCell();
+	setCell(food[0], food[1], "green");
 }
 
 function getScore() {
@@ -78,6 +90,7 @@ function play() {
 }
 function start() {
 	initializeSnake();
+	createFood();
 	_timerRef = window.setInterval(play,200);
 }
 
@@ -145,6 +158,9 @@ function moveUp() {
 		setCell(tail[0], tail[1], "white");
 		snake.push(head);
 		snake.shift();
+		if (head[0] === food[0] && head[1] === food[1]) {
+			createFood();
+		}
 	}
 }
 
@@ -160,6 +176,9 @@ function moveLeft() {
 		setCell(tail[0], tail[1], "white");
 		snake.push(head);
 		snake.shift();
+		if (head[0] === food[0] && head[1] === food[1]) {
+			createFood();
+		}
 	}
 }
 
@@ -175,6 +194,9 @@ function moveRight() {
 		setCell(tail[0], tail[1], "white");
 		snake.push(head);
 		snake.shift();
+		if (head[0] === food[0] && head[1] === food[1]) {
+			createFood();
+		}
 	}
 }
 
@@ -190,6 +212,9 @@ function moveDown() {
 		setCell(tail[0], tail[1], "white");
 		snake.push(head);
 		snake.shift();
+		if (head[0] === food[0] && head[1] === food[1]) {
+			createFood();
+		}
 	}
 }
  
