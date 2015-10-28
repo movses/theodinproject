@@ -1,10 +1,8 @@
 var _score;
-var _startPoint;
-var _snakeSize;
-var _head;
-var _tail;
 var _direction;
 var _timerRef;
+
+var snake;
 
 function createMatrix() {
 	var matrix = document.getElementById('matrix');
@@ -25,28 +23,12 @@ function setScore(score) {
 	_score = score;
 }
 
-function getSnakeSize() {
-	return _snakeSize;
-}
-
-function setSnakeSize(snakeSize) {
-	_snakeSize = snakeSize;
-}
-
 function getHead() {
-	return _head;
-}
-
-function setHead(head) {
-	_head = head;
-}
-
-function setTail(tail) {
-	_tail = tail;
+	return snake[snake.length - 1].slice();
 }
 
 function getTail() {
-	return _tail;
+	return snake[0].slice();
 }
 function showScore() {
 	document.getElementById('score').innerHTML = _score;
@@ -79,14 +61,10 @@ function cleanUp() {
 
 function initializeSnake() {
 	_score = 0;
-	_startPoint = [20,5];
-	_snakeSize = 3;
 	_direction = 'r';
-	setTail([20,5]);
-	setHead([20,5 + _snakeSize - 1])
-	for (i = 0; i < _snakeSize; i++) {
-		setCell(_startPoint[0], _startPoint[1], "blue");
-		_startPoint[1] += 1;
+	snake = [[20,5], [20,6], [20,7]];
+	for (i = 0; i < snake.length; i++) {
+		setCell(snake[i][0], snake[i][1], "blue");
 	}
 }
 
@@ -112,19 +90,30 @@ function render() {
 document.onkeydown = function(e) {
 	switch (e.keyCode) {
 		case 37:
-			_direction = 'l';
+			if(_direction !== 'l' && _direction !== 'r') {
+				_direction = 'l';
+				move(_direction);
+			}
 			break;
 		case 38:
-			_direction = 'u';
+			if(_direction !== 'u' && _direction !== 'd') {
+				_direction = 'u';
+				move(_direction);
+			}
 			break;
 		case 39:
-			_direction = 'r';
+			if(_direction !== 'l' && _direction !== 'r') {
+				_direction = 'r';
+				move(_direction);
+			}
 			break;
 		case 40:
-			_direction = 'd';
+			if(_direction !== 'u' && _direction !== 'd') {
+				_direction = 'd';
+				move(_direction);
+			}
 			break;
 	}
-	move(_direction);
 };
 
 function move(direction) {
@@ -146,68 +135,61 @@ function move(direction) {
 
 function moveUp() {
 	var head = getHead();
-	var snakeSize = getSnakeSize();
 	var tail = getTail();	
 
 	head[0] -= 1;
-	setCell(head[0], head[1], "blue");
-	setCell(tail[0], tail[1], "white");	
-	tail[1] -= 1;
-	setHead(head);
-	setTail(tail);
 	if(head[0] < 0) {
 		restart();
+	} else {
+		setCell(head[0], head[1], "blue");
+		setCell(tail[0], tail[1], "white");
+		snake.push(head);
+		snake.shift();
 	}
 }
 
 function moveLeft() {
 	var head = getHead();
-	var snakeSize = getSnakeSize();
 	var tail = getTail();
 
 	head[1] -= 1;
-	setCell(head[0], head[1], "blue");
-	setCell(tail[0], tail[1] - snakeSize, "white");
-	tail[1] -= 1;
-	setHead(head);
-	setTail(tail);
 	if(head[1] < 0) {
 		restart();
+	} else {
+		setCell(head[0], head[1], "blue");
+		setCell(tail[0], tail[1], "white");
+		snake.push(head);
+		snake.shift();
 	}
 }
 
 function moveRight() {
 	var head = getHead();
-	var snakeSize = getSnakeSize();
 	var tail = getTail();	
 	
 	head[1] += 1;
-	setCell(head[0], head[1], "blue");
-	setCell(tail[0], tail[1], "white");
-	tail[1] += 1;
- 
-	setHead(head);
-	setTail(tail);
-
 	if(head[1] > 39) {
 		restart();
+	} else {
+		setCell(head[0], head[1], "blue");
+		setCell(tail[0], tail[1], "white");
+		snake.push(head);
+		snake.shift();
 	}
 }
 
 function moveDown() {
 	var head = getHead();
-	var snakeSize = getSnakeSize();
 	var tail = getTail();	
 
 	head[0] += 1;
-	setCell(head[0], head[1], "blue");
-	setCell(tail[0], tail[1], "white");
-	tail[1] += 1;
-	setHead(head);
-	setHead(tail);
-
 	if(head[0] > 39) {
 		restart();
+	} else {
+		setCell(head[0], head[1], "blue");
+		setCell(tail[0], tail[1], "white");
+		snake.push(head);
+		snake.shift();
 	}
 }
  
