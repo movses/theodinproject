@@ -72,7 +72,6 @@ function cleanUp() {
 }
 
 function initializeSnake() {
-	_score = 0;
 	_direction = 'r';
 	snake = [[20,5], [20,6], [20,7]];
 	for (i = 0; i < snake.length; i++) {
@@ -90,6 +89,8 @@ function play() {
 }
 function start() {
 	initializeSnake();
+	_score = 0;
+	showScore();
 	createFood();
 	_timerRef = window.setInterval(play,200);
 }
@@ -97,7 +98,6 @@ function start() {
 function render() {
 	createMatrix();
 	start();
-	showScore();
 }
 
 document.onkeydown = function(e) {
@@ -158,6 +158,8 @@ function moveUp() {
 		snake.push(head);
 		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+			_score++;
+			showScore();			
 		} else {
 			setCell(tail[0], tail[1], "white");
 			snake.shift();
@@ -177,6 +179,8 @@ function moveLeft() {
 		snake.push(head);
 		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+			_score++;
+			showScore();			
 		} else {
 			setCell(tail[0], tail[1], "white");
 			snake.shift();
@@ -196,6 +200,8 @@ function moveRight() {
 		snake.push(head);
 		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+			_score++;
+			showScore();			
 		} else {
 			setCell(tail[0], tail[1], "white");
 			snake.shift();
@@ -215,6 +221,8 @@ function moveDown() {
 		snake.push(head);
 		if (head[0] === food[0] && head[1] === food[1] ) {
 			createFood();
+			_score++;
+			showScore();			
 		} else {
 			setCell(tail[0], tail[1], "white");
 			snake.shift();
