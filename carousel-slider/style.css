@@ -1,0 +1,18 @@
+#slider {
+	width: 800px;
+	height: 600px;
+//	padding: 5px auto;
+	border-width 20px;
+	border-style: solid;
+//	border-color: grey;
+	margin: 0 auto;
+//	box-shadow: 4px 4px gray;
+//	top: 50%;
+//	left 50%;
+}
+
+#slider .image {
+	width 750px;
+	height 550px;
+	margin 0 auto;
+}
