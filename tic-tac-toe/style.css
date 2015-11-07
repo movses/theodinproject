@@ -1,3 +1,24 @@
 body {
 	background-color : #F2F2F2;	
 }
+
+#container {
+	width: 270px;
+	height: 270px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -135px 0 0 -135px;
+}
+
+#container .cell {
+	float: left;
+	width: 80px;
+	height: 80px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	background-color: gray; 
+}
+
+
+
