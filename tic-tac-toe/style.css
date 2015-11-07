@@ -3,22 +3,31 @@ body {
 }
 
 #container {
-	width: 270px;
-	height: 270px;
+	width: 180px;
+	height: 180px;
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin: -135px 0 0 -135px;
+	margin: -90px 0 0 -90px;
 }
 
 #container .cell {
 	float: left;
-	width: 80px;
-	height: 80px;
+	width: 50px;
+	height: 50px;
 	margin-left: 10px;
 	margin-bottom: 10px;
 	background-color: gray; 
 }
 
+.xImg {
+	left: 0px;
+	width: 49px;
+	background: url('images/x-o.jpg') 0 0;
+}
 
-
+.yImg {
+	left: 50px;
+	width: 48px;
+	background: url('images/x-o.jpg') 50px 0;
+}
