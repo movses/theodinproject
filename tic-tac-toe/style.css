@@ -11,6 +11,17 @@ body {
 	margin: -90px 0 0 -90px;
 }
 
+#message {
+	width: 180px;
+	height: 40px;
+	text-align: center; 
+	color: #E5E600;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -130px 0 0 -80px;
+}
+
 #container .cell {
 	float: left;
 	width: 50px;
