@@ -1,0 +1,12 @@
+body {
+	background-color : #F2F2F2;	
+}
+
+#container {
+	width: 180px;
+	height: 180px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -90px 0 0 -90px;
+}
