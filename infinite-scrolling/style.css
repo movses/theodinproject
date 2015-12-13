@@ -2,11 +2,17 @@ body {
 	background-color : #F2F2F2;	
 }
 
-#container {
-	width: 180px;
-	height: 180px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin: -90px 0 0 -90px;
+#container div {
+	margin: 0 auto; 
 }
+
+hr { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}
+
