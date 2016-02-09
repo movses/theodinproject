@@ -23,10 +23,6 @@ var playerMissiles = [];
 var blowMissiles = [];
 var houses = [true,true,true,true,true,true];
 var score = 0;
-
-var playerMissileEvent = function(event) {
-    createPlayerMissile(canvas, event);
-}
 var runAnimation = true;
 
 function Missile(startX, startY, endX, endY, color) {
@@ -53,7 +49,7 @@ function Blow(endX, endY) {
 
 function render() {
 	canvas = document.getElementById('canvas');
-	canvas.addEventListener('click', playerMissileEvent);
+	canvas.addEventListener('click', createPlayerMissile);
 
     setInterval( function() {
         if (enemyMissiles.length < 6) {
@@ -130,7 +126,7 @@ function check() {
         checkEnemyMissile();
         checkBlow();
     } else {
-        canvas.removeEventListener('click', playerMissileEvent);
+        canvas.removeEventListener('click', createPlayerMissile);
         runAnimation = false;
         context.fillStyle = "red";
         context.font = "italic 60pt Arial";
@@ -259,7 +255,7 @@ window.requestAnimFrame = (function(){
 			}; 
 		})();
 
-function createPlayerMissile(canvas, event) {
+function createPlayerMissile() {
 	var rect = canvas.getBoundingClientRect();
 
 	var endX = event.clientX - rect.left;   
