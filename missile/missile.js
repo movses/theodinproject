@@ -32,7 +32,7 @@ var runAnimation = true;
 function Missile(startX, startY, endX, endY, color) {
 		this.startX = startX;
 		this.startY = startY;
-		this.endX = endX
+		this.endX = endX;
 		this.endY = endY;
 		this.color = color;
 		this.x = startX;
