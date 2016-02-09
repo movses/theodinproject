@@ -18,62 +18,131 @@ var canvasSettings = {
 
 var canvas;
 var context;
-var endX, endY;
 var enemyMissiles = [];
 var playerMissiles = [];
 var blowMissiles = [];
+var houses = [true,true,true,true,true,true];
+var score = 0;
+
+var playerMissileEvent = function(event) {
+    createPlayerMissile(canvas, event);
+}
+var runAnimation = true;
 
 function Missile(startX, startY, endX, endY, color) {
 		this.startX = startX;
 		this.startY = startY;
-		this.endX = endX;
+		this.endX = endX
 		this.endY = endY;
 		this.color = color;
 		this.x = startX;
 		this.y = startY;
 }
 
-Missile.prototype.blow = function() {
-    var missileBlow = new Blow();
+Missile.prototype.blow = function(endX, endY) {
+    var missileBlow = new Blow(endX, endY);
     blowMissiles.push(missileBlow);
 }
 
-function Blow() {
+function Blow(endX, endY) {
+    this.blowX = endX;
+    this.blowY = endY;
     this.currentRadius = 0;
     this.blowRadius = 25;
 }
 
-
-
 function render() {
-
 	canvas = document.getElementById('canvas');
+	canvas.addEventListener('click', playerMissileEvent);
 
-	canvas.addEventListener('click', function(event) {
-		createPlayerMissile(canvas, event);
-	});
+    setInterval( function() {
+        if (enemyMissiles.length < 6) {
+            createEnemyMissiles();
+        }
+    }, 1000);
 
     context = canvas.getContext('2d');
 
-    draw();
-    enemyBusyLoop();
-    playerBusyLoop();
+    loop();
+}
 
+function loop() {
+    if(runAnimation){
+        window.requestAnimFrame(loop);
+        draw();
+        update();
+    }
 }
 
 function draw() {
-//    setTimeout( function() {
-        window.requestAnimFrame(draw);
-        context.clearRect(0, 0, canvasSettings.width, canvasSettings.height);
-        drawGround();
-        drawStrikes();
-        drawVillages();
-        drawScore();
-//    }, 2000 );
+	context.clearRect(0, 0, canvasSettings.width, canvasSettings.height);
+	drawGround();
+	drawStrikes();
+	drawVillages();
+	drawScore();
+    drawEnemyMissiles();
+    drawPlayerMissiles();
+    drawBlows();
+}
+
+function drawPlayerMissiles() {
+    playerMissiles.forEach( function(missile) {
+        context.beginPath();
+        context.moveTo(missile.startX, missile.startY);
+        context.lineTo(missile.x, missile.y);
+        context.closePath();
+        context.strokeStyle = 'blue';
+        context.stroke();
+    });
+}
+
+function drawEnemyMissiles() {
+    enemyMissiles.forEach( function(missile) {
+        context.beginPath();
+        context.moveTo(missile.startX, missile.startY);
+        context.lineTo(missile.x, missile.y);
+        context.closePath();
+        context.strokeStyle = 'red';
+        context.stroke();
+    });
+}
+
+function drawBlows() {
+    blowMissiles.forEach( function(blow) {
+        context.beginPath();
+        context.arc(blow.blowX, blow.blowY, blow.currentRadius, 0, 2 * Math.PI);
+        context.closePath();
+        context.fillStyle = 'white';
+        context.fill();
+    });
+}
+
+function update() {
+	updateEnemyMissile();
+	updatePlayerMissile();
+	updateBlow();
+	check();
+}
+
+function check() {
+    if (!isGameOver()) {
+        checkPlayerMissile();
+        checkEnemyMissile();
+        checkBlow();
+    } else {
+        canvas.removeEventListener('click', playerMissileEvent);
+        runAnimation = false;
+        context.fillStyle = "red";
+        context.font = "italic 60pt Arial";
+        context.fillText("Game Over", canvasSettings.width / 4 , canvasSettings.height / 4);
+
+        context.fillStyle = "yellow";
+        context.font = "italic 60pt Arial";
+        context.fillText("Score " + score, canvasSettings.width / 3 , canvasSettings.height / 2);
+    }
 }
 
 function drawVillages() {
-
 	var houseDistance = canvasSettings.houseSettings.houseDistance;
 	var houseMargin = canvasSettings.houseSettings.houseMargin;
 	var houseWidth = canvasSettings.houseSettings.houseWidth;
@@ -85,38 +154,50 @@ function drawVillages() {
     var groundHeight = canvasSettings.groundHeight;
 
 	context.fillStyle = "brown";
-	context.fillRect(strikeMargin + strikeWidth + houseMargin + 0*houseWidth + 0*houseDistance,
-					canvasHeight - groundHeight - houseHeight, 
-					houseWidth,
-					houseHeight);
-	context.fillRect(strikeMargin + strikeWidth + houseMargin + 1*houseWidth + 1*houseDistance,
-					canvasHeight - groundHeight - houseHeight, 
-					houseWidth, 
-					houseHeight);
-    context.fillRect(strikeMargin + strikeWidth + houseMargin + 2*houseWidth + 2*houseDistance,
-					canvasHeight - groundHeight - houseHeight, 
-					houseWidth, 
-					houseHeight);
+    if(houses[0]) {
+        context.fillRect(strikeMargin + strikeWidth + houseMargin + 0*houseWidth + 0*houseDistance,
+            canvasHeight - groundHeight - houseHeight,
+            houseWidth,
+            houseHeight);
+    }
 
+    if(houses[1]) {
+        context.fillRect(strikeMargin + strikeWidth + houseMargin + 1*houseWidth + 1*houseDistance,
+            canvasHeight - groundHeight - houseHeight,
+            houseWidth,
+            houseHeight);
+    }
 
-    context.fillRect(strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 0*houseWidth + 0*houseDistance,
-					 canvasHeight - groundHeight - houseHeight, 
-					 houseWidth, 
-					 houseHeight);
+    if(houses[2]) {
+        context.fillRect(strikeMargin + strikeWidth + houseMargin + 2*houseWidth + 2*houseDistance,
+            canvasHeight - groundHeight - houseHeight,
+            houseWidth,
+            houseHeight);
+    }
 
-    context.fillRect(strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 1*houseWidth + 1*houseDistance,
-					 canvasHeight - groundHeight - houseHeight,
-					 houseWidth,
-					 houseHeight);
+    if(houses[3]) {
+        context.fillRect(strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 0*houseWidth + 0*houseDistance,
+            canvasHeight - groundHeight - houseHeight,
+            houseWidth,
+            houseHeight);
+    }
 
-    context.fillRect(strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 2*houseWidth + 2*houseDistance,
-					 canvasHeight - groundHeight - houseHeight,
-					 houseWidth,
-					 houseHeight);
+    if(houses[4]) {
+        context.fillRect(strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 1*houseWidth + 1*houseDistance,
+            canvasHeight - groundHeight - houseHeight,
+            houseWidth,
+            houseHeight);
+    }
+
+    if(houses[5]) {
+        context.fillRect(strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 2*houseWidth + 2*houseDistance,
+            canvasHeight - groundHeight - houseHeight,
+            houseWidth,
+            houseHeight);
+    }
 }
 
 function drawStrikes() {
-  
 	var strikeMargin = canvasSettings.strikeSettings.strikeMargin;
 	var strikeWidth = canvasSettings.strikeSettings.strikeWidth;
 	var strikeHeight = canvasSettings.strikeSettings.strikeHeight;
@@ -132,8 +213,7 @@ function drawStrikes() {
     context.lineTo(strikeMargin + 20 + 40 + 20, canvasHeight - groundHeight);
     context.closePath();
     context.fill();
-	
-	
+
 	context.beginPath();
 	context.moveTo(strikeMargin + 1*strikeWidth + 1*strikeDistance, canvasHeight - groundHeight);
 	context.lineTo(strikeMargin + 1*strikeWidth + 1*strikeDistance + 20, canvasHeight - groundHeight - strikeHeight);
@@ -141,7 +221,6 @@ function drawStrikes() {
 	context.lineTo(strikeMargin + 1*strikeWidth + 1*strikeDistance + 20 + 40 + 20, canvasHeight - groundHeight);
 	context.closePath();
 	context.fill();
-
 
 	context.beginPath();
 	context.moveTo(strikeMargin + 2*strikeWidth + 2*strikeDistance, canvasHeight - groundHeight);
@@ -164,11 +243,13 @@ function drawGround() {
 }
 
 function drawScore() {
-  
+    context.fillStyle = "yellow";
+    context.font = "italic 20pt Arial ";
+    context.fillText("Score " + score, 10, 30);
 }
 
 window.requestAnimFrame = (function(){
-		return  window.requestAnimationFrame       ||
+		return  window.requestAnimationFrame   ||
 			window.webkitRequestAnimationFrame ||
 			window.mozRequestAnimationFrame    ||
 			window.oRequestAnimationFrame      ||
@@ -210,104 +291,119 @@ function createPlayerMissile(canvas, event) {
 
 }
 
-
-function playerBusyLoop() {
-	window.requestAnimFrame(playerBusyLoop);
-	updatePlayerMissile();
-	checkPlayerMissile();
-    updateBlow();
-    checkBlow();
-}
-
 function updatePlayerMissile() {
 	playerMissiles.forEach( function(missile) {
-		missile.y -= 5;
+        var dy = 200 / 60;
+		missile.y -= dy;
 		var ang = Math.tan((missile.endX - missile.startX) /  (missile.startY - missile.endY));
 		missile.x = (missile.startY - missile.y) * ang + missile.startX;
-		
-		if (missile.y > missile.endY) {
-			context.beginPath();
-			context.moveTo(missile.startX, missile.startY);
-			context.lineTo(missile.x, missile.y);
-			context.closePath();
-			context.strokeStyle = 'blue';
-			context.stroke();
-		}
 	});
 }
 
 function checkPlayerMissile() {
 	for (var i = playerMissiles.length - 1; i >= 0; i--)  {	
 		if (playerMissiles[i].y < playerMissiles[i].endY ) {
-			endX = playerMissiles[i].x;
-			endY = playerMissiles[i].y;
-            playerMissiles[i].blow();
+            playerMissiles[i].blow(playerMissiles[i].x, playerMissiles[i].y);
 			playerMissiles.splice(i,1);
 		}
 	}
 }
 
-function enemyBusyLoop() {
-	setTimeout( function() {
-        window.requestAnimFrame(enemyBusyLoop);
-        createEnemyMissile();
-		updateEnemyMissile();
-		checkEnemyMissile();
-        updateBlow();
-        checkBlow();
-	}, 1000 / 2);
-}
-
-function createEnemyMissile() {
-	if (enemyMissiles.length < 10) {
-		var startX = Math.random() * canvasSettings.width;
-		var startY = 0;
-		var endX = Math.random() * canvasSettings.width;
-		var endY =  canvasSettings.height - canvasSettings.groundHeight;
-		var color = "red";
-		var missile = new Missile(startX, startY, endX, endY, color);
-		enemyMissiles.push(missile);
-	}
-}
-
 function updateEnemyMissile() {
-	enemyMissiles.forEach( function(missile) {
-		missile.y = missile.y + 5;
+    var dy = 40 / 60;
+    enemyMissiles.forEach( function(missile) {
+		missile.y += dy;
 		var ang = Math.tan((missile.endX - missile.startX) /  (missile.endY - missile.startY));
 		missile.x = (missile.y - missile.startY) * ang + missile.startX;
-		
-		if (missile.y < missile.endY) {
-			context.beginPath();
-			context.moveTo(missile.startX, missile.startY);
-			context.lineTo(missile.x, missile.y);
-			context.closePath();
-			context.strokeStyle = 'red';
-			context.stroke();
-		}
 	});
 }
+
+function createEnemyMissiles() {
+	var startX = Math.random() * canvasSettings.width;
+	var startY = 0;
+	var endX = Math.random() * canvasSettings.width;
+	var endY =  canvasSettings.height - canvasSettings.groundHeight;
+	var color = "red";
+	var missile = new Missile(startX, startY, endX, endY, color);
+	enemyMissiles.push(missile);
+}
+
 
 function checkEnemyMissile() {
 	for (var i = enemyMissiles.length - 1; i >= 0; i--)  {	
 		if (enemyMissiles[i].y >= enemyMissiles[i].endY) {
-			endX = enemyMissiles[i].x;
-			endY = enemyMissiles[i].y;
-            enemyMissiles[i].blow();
+            checkHouseHit(enemyMissiles[i].endX);
+            enemyMissiles[i].blow(enemyMissiles[i].x, enemyMissiles[i].y);
 			enemyMissiles.splice(i,1);				
 		}
 	}
 }
 
+function checkHouseHit(x) {
+    var strikeMargin = canvasSettings.strikeSettings.strikeMargin;
+    var strikeWidth = canvasSettings.strikeSettings.strikeWidth;
+    var strikeDistance = canvasSettings.strikeSettings.strikeDistance;
+    var houseDistance = canvasSettings.houseSettings.houseDistance;
+    var houseMargin = canvasSettings.houseSettings.houseMargin;
+    var houseWidth = canvasSettings.houseSettings.houseWidth;
+
+    if (x > (strikeMargin + 1*strikeWidth + houseMargin + 0*houseWidth + 0*houseDistance) &&
+        x < (strikeMargin + 1*strikeWidth + houseMargin + 0*houseWidth + 0*houseDistance + houseWidth)) {
+        houses[0] = false;
+    }
+    if (x > (strikeMargin + 1*strikeWidth + houseMargin + 1*houseWidth + 1*houseDistance) &&
+        x < (strikeMargin + 1*strikeWidth + houseMargin + 1*houseWidth + 1*houseDistance + houseWidth)) {
+        houses[1] = false;
+    }
+    if (x > (strikeMargin + 1*strikeWidth + houseMargin + 2*houseWidth + 2*houseDistance) &&
+        x < (strikeMargin + 1*strikeWidth + houseMargin + + 2*houseWidth + 2*houseDistance + houseWidth)) {
+        houses[2] = false;
+    }
+    if (x > (strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 0*houseWidth + 0*houseDistance) &&
+        x < (strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 0*houseWidth + 0*houseDistance + houseWidth)) {
+        houses[3] = false;
+    }
+    if (x > (strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 1*houseWidth + 1*houseDistance) &&
+        x < (strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 1*houseWidth + 1*houseDistance + houseWidth)) {
+        houses[4] = false;
+    }
+    if (x > (strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 2*houseWidth + 2*houseDistance) &&
+        x < (strikeMargin + 2*strikeWidth + 1*strikeDistance + houseMargin + 2*houseWidth + 2*houseDistance + houseWidth)) {
+        houses[5] = false;
+    }
+}
+
+function isGameOver() {
+    var gameOver = true;
+    for (var i = 0; i < houses.length; ++i) {
+        if (houses[i] === true) {
+            gameOver = false;
+            break;
+        }
+    }
+    return gameOver;
+}
+
+
+function checkEnemyMissileHit(x, y, r) {
+    /*
+    * to check point belongs to circle
+    * point must satisfy the following formula
+    * (x-x0)^2 + (y-y0)^2 < r^2
+    * */
+    for (var i = enemyMissiles.length - 1; i >= 0; i--)  {
+        if((Math.pow((x - enemyMissiles[i].x), 2) + Math.pow((y - enemyMissiles[i].y), 2)) < Math.pow(r, 2)) {
+            score++;
+            enemyMissiles.splice(i,1);
+        }
+    }
+}
+
 function updateBlow() {
     blowMissiles.forEach( function(blow) {
-        if (blow.currentRadius < blow.blowRadius) {
-            context.beginPath();
-            context.arc(endX, endY, blow.currentRadius, 0, 2 * Math.PI);
-            context.closePath();
-            context.fillStyle = 'white';
-            context.fill();
-        }
-        blow.currentRadius += 1;
+        var dr = blow.blowRadius / (2 * 60);
+        blow.currentRadius += dr;
+        checkEnemyMissileHit(blow.blowX, blow.blowY, blow.currentRadius);
     });
 }
 
