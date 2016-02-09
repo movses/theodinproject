@@ -91,7 +91,7 @@ function drawPlayerMissiles() {
         context.moveTo(missile.startX, missile.startY);
         context.lineTo(missile.x, missile.y);
         context.closePath();
-        context.strokeStyle = 'blue';
+        context.strokeStyle = missile.color;
         context.stroke();
     });
 }
@@ -102,7 +102,7 @@ function drawEnemyMissiles() {
         context.moveTo(missile.startX, missile.startY);
         context.lineTo(missile.x, missile.y);
         context.closePath();
-        context.strokeStyle = 'red';
+        context.strokeStyle = missile.color;
         context.stroke();
     });
 }
