@@ -72,10 +72,10 @@ function loop() {
 
 function draw() {
 	context.clearRect(0, 0, canvasSettings.width, canvasSettings.height);
-	drawGround();
-	drawStrikes();
-	drawVillages();
-	drawScore();
+    drawGround();
+    drawStrikes();
+    drawVillages();
+    drawScore();
     drawEnemyMissiles();
     drawPlayerMissiles();
     drawBlows();
@@ -384,7 +384,7 @@ function isGameOver() {
 function checkEnemyMissileHit(x, y, r) {
     /*
     * to check point belongs to circle
-    * point must satisfy the following formula
+    * it must satisfy the following formula
     * (x-x0)^2 + (y-y0)^2 < r^2
     * */
     for (var i = enemyMissiles.length - 1; i >= 0; i--)  {
